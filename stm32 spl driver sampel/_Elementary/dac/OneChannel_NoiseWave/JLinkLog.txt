@@ -1,0 +1,27 @@
+
+T1A10 000:334 SEGGER J-Link V4.96d Log File (0000ms, 0314ms total)
+T1A10 000:334 DLL Compiled: Jan 29 2015 11:45:37 (0000ms, 0314ms total)
+T1A10 000:334 Logging started @ 2015-12-05 14:46 (0000ms, 0314ms total)
+T1A10 000:334 JLINK_SetWarnOutHandler(...) (0000ms, 0314ms total)
+T1A10 000:334 JLINK_OpenEx(...)
+Firmware: J-Link ARM V8 compiled Nov 28 2014 13:44:46
+Hardware: V8.00
+S/N: 58004321
+Feature(s): RDI, FlashBP, FlashDL, JFlash, GDB  returns O.K. (0307ms, 0621ms total)
+T1A10 000:641 JLINK_SetErrorOutHandler(...) (0000ms, 0621ms total)
+T1A10 000:641 JLINK_ExecCommand("ProjectFile = "C:\Users\Mahmood\Desktop\Naminic samles\Elementary\dac\OneChannel_NoiseWave\JLinkSettings.ini"", ...)  returns 0x00 (0001ms, 0622ms total)
+T1A10 000:647 JLINK_ExecCommand("Device = STM32F107VC", ...)Device "STM32F107VC" selected.  returns 0x00 (0015ms, 0637ms total)
+T1A10 000:662 JLINK_ExecCommand("DisableConnectionTimeout", ...)  returns 0x01 (0000ms, 0637ms total)
+T1A10 000:662 JLINK_GetHardwareVersion()  returns 0x13880 (0000ms, 0637ms total)
+T1A10 000:662 JLINK_GetDLLVersion()  returns 49604 (0000ms, 0637ms total)
+T1A10 000:662 JLINK_GetFirmwareString(...) (0000ms, 0637ms total)
+T1A10 000:670 JLINK_GetDLLVersion()  returns 49604 (0000ms, 0637ms total)
+T1A10 000:670 JLINK_GetCompileDateTime() (0000ms, 0637ms total)
+T1A10 000:672 JLINK_GetFirmwareString(...) (0000ms, 0637ms total)
+T1A10 000:674 JLINK_GetHardwareVersion()  returns 0x13880 (0001ms, 0638ms total)
+T1A10 000:684 JLINK_TIF_Select(JLINKARM_TIF_JTAG)  returns 0x00 (0003ms, 0641ms total)
+T1A10 000:687 JLINK_SetSpeed(20000) (0001ms, 0642ms total)
+T1A10 000:688 JLINK_GetIdData(...) (0001ms, 0643ms total)
+T1A10 002:479 JLINK_Close() (0001ms, 0644ms total)
+T1A10 002:479  (0001ms, 0644ms total)
+T1A10 002:479 Closed (0001ms, 0644ms total)

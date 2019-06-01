@@ -1,0 +1,7 @@
+Dependencies for Project 'project', Target 'Target 1': (DO NOT MODIFY !)
+F (.\startup_stm32f10x_cl.s)(0x508798F4)(--cpu Cortex-M3 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F10x --list "startup_stm32f10x_cl.lst" --xref -o "startup_stm32f10x_cl.o" --depend "startup_stm32f10x_cl.d")
+F (.\main.c)(0x56594C6A)()
+F (..\..\..\CMSIS Liberary\CMSIS\CM3\CoreSupport\core_cm3.c)(0x4C0C7BA6)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I "..\..\..\CMSIS Liberary\STM32F10x_StdPeriph_Driver\inc" -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F10x -DSTM32F10X_CL -DUSE_STDPERIPH_DRIVER -o "core_cm3.o" --omf_browse "core_cm3.crf" --depend "core_cm3.d")
+F (..\..\..\CMSIS Liberary\CMSIS\CM3\DeviceSupport\ST\STM32F10x\system_stm32f10x.c)(0x561A7158)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I "..\..\..\CMSIS Liberary\STM32F10x_StdPeriph_Driver\inc" -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F10x -DSTM32F10X_CL -DUSE_STDPERIPH_DRIVER -o "system_stm32f10x.o" --omf_browse "system_stm32f10x.crf" --depend "system_stm32f10x.d")
+F (..\..\..\CMSIS Liberary\STM32F10x_StdPeriph_Driver\src\stm32f10x_rcc.c)(0x4D778BEC)()
+F (..\..\..\CMSIS Liberary\STM32F10x_StdPeriph_Driver\src\stm32f10x_gpio.c)(0x4D793EFE)()

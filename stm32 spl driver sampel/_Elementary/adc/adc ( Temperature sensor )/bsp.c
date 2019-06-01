@@ -1,0 +1,235 @@
+#include "bsp.h"
+#include "stm32f10x_usart.h"
+#include <stdio.h>
+
+
+/******************************************************************************
+            Initial RCC
+  * @brief  Configures different system clocks
+  * @param  None
+  * @retval None                           
+******************************************************************************/
+void RCC_Configuration(){
+	RCC_APB2PeriphClockCmd(COM1_CLK_PORT|RCC_APB2Periph_AFIO,ENABLE);
+	RCC_APB2PeriphClockCmd(COM1_CLK,ENABLE);
+	
+	RCC_APB2PeriphClockCmd(COM2_CLK_PORT|RCC_APB2Periph_AFIO,ENABLE);
+	RCC_APB1PeriphClockCmd(COM2_CLK,ENABLE);
+
+}
+/******************************************************************************
+           Initial GPIO
+  * @brief  Configure GPIO Pins
+  * @param  None
+  * @retval None
+******************************************************************************/
+void GPIO_Configuration(void){
+	
+  GPIO_InitTypeDef GPIO_InitStruct;
+	GPIO_PinRemapConfig(COM2_Remap,ENABLE);
+	GPIO_PinRemapConfig(COM1_Remap,ENABLE);
+	
+	GPIO_InitStruct.GPIO_Pin = COM1_TXD_PIN;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;	
+	GPIO_Init(COM1_PORT,&GPIO_InitStruct); //TX1	
+
+	GPIO_InitStruct.GPIO_Pin = COM1_RXD_PIN;
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;	
+	GPIO_Init(COM1_PORT,&GPIO_InitStruct); //RX1
+	
+	GPIO_InitStruct.GPIO_Pin = COM2_TXD_PIN;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;	
+	GPIO_Init(COM2_PORT,&GPIO_InitStruct); //TX2	
+
+	GPIO_InitStruct.GPIO_Pin = COM2_RXD_PIN;
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;	
+	GPIO_Init(COM2_PORT,&GPIO_InitStruct); //RX2
+	//----------------------------------------------------		
+}
+/******************************************************************************
+           Initial UART1
+  * @brief  Configure UART1
+  * @param  None
+  * @retval None
+******************************************************************************/
+void Com1_Intial(void){
+	USART_InitTypeDef USART_InitStructure;
+  USART_InitStructure.USART_BaudRate = 9600;
+  USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+  USART_InitStructure.USART_StopBits = USART_StopBits_1;
+  USART_InitStructure.USART_Parity = USART_Parity_No;
+  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+  USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+	USART_Init(COM1,&USART_InitStructure);
+	USART_Cmd(COM1,ENABLE);
+}
+/******************************************************************************
+           Initial UART2
+  * @brief  Configure UART2
+  * @param  None
+  * @retval None
+******************************************************************************/
+void Com2_Intial(void){
+	USART_InitTypeDef USART_InitStructure;
+  USART_InitStructure.USART_BaudRate = 9600;
+  USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+  USART_InitStructure.USART_StopBits = USART_StopBits_1;
+  USART_InitStructure.USART_Parity = USART_Parity_No;
+  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+  USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+	USART_Init(COM2,&USART_InitStructure);
+	USART_Cmd(COM2,ENABLE);
+}
+
+/******************************************************************************
+          Initial ADC
+  * @brief  Configure ADC
+  * @param  None
+  * @retval None
+******************************************************************************/
+void ADC1_Intial(void){
+
+  ADC_InitTypeDef  ADC_InitStructure;
+  GPIO_InitTypeDef GPIO_InitStructure; 	
+	
+  //Variable used to setup the GPIO pins
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1 | RCC_APB2Periph_GPIOB, ENABLE);
+	
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+  GPIO_Init(GPIOB, &GPIO_InitStructure);
+	
+  /* PCLK2 is the APB2 clock */
+  /* ADCCLK = PCLK2/6 = 72/6 = 12MHz*/
+  RCC_ADCCLKConfig(RCC_PCLK2_Div6);
+
+  /* Enable ADC1 clock so that we can talk to it */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+  /* Put everything back to power-on defaults */
+  ADC_DeInit(ADC1);
+
+  /* ADC1 Configuration ------------------------------------------------------*/
+  /* ADC1 and ADC2 operate independently */
+  ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;
+  /* Disable the scan conversion so we do one at a time */
+  ADC_InitStructure.ADC_ScanConvMode = DISABLE;
+  /* Don't do continuous conversions - do them on demand */
+  ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;
+  /* Start conversion by software, not an external trigger */
+  ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;
+  /* Conversions are 12 bit - put them in the lower 12 bits of the result */
+  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
+  /* Say how many channels would be used by the sequencer */
+  ADC_InitStructure.ADC_NbrOfChannel = 1;
+
+  /* Now do the setup */
+  ADC_Init(ADC1, &ADC_InitStructure);
+  /* Enable ADC1 */
+  ADC_Cmd(ADC1, ENABLE);
+
+  /* Enable ADC1 reset calibration register */
+  ADC_ResetCalibration(ADC1);
+  /* Check the end of ADC1 reset calibration register */
+  while(ADC_GetResetCalibrationStatus(ADC1));
+  /* Start ADC1 calibration */
+  ADC_StartCalibration(ADC1);
+  /* Check the end of ADC1 calibration */
+  while(ADC_GetCalibrationStatus(ADC1));		
+
+}
+
+  /******************************************************************************
+           Get ADC value
+  * @brief  This function Converts to Digital and get the value
+  * @param  None
+  * @retval None
+******************************************************************************/
+unsigned int getVal(void)
+{	
+
+	ADC_RegularChannelConfig(ADC1, ADC1_IN8, 1, ADC_SampleTime_1Cycles5);
+  // Start the conversion
+  ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+  // Wait until conversion completion
+  while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
+  // Get the conversion value
+  return ADC_GetConversionValue(ADC1);
+}
+
+
+
+//The initialization of ADC
+//Here we only with the regular channel as an example
+//Our default will open channel 0~3    
+void T_Adc_Init(void) //ADC channel initialization
+{
+    ADC_InitTypeDef ADC_InitStructure; 
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |RCC_APB2Periph_ADC1    , ENABLE );     //Enable GPIOA, ADC1 channel clock
+  
+    RCC_ADCCLKConfig(RCC_PCLK2_Div6); //The 6 72M clock frequency factor/6=12MHz
+
+    ADC_DeInit(ADC1); //All the register peripheral ADC1 is reset to the default values
+ 
+    ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;    //ADC mode: ADC1 and ADC2 working in independent mode
+    ADC_InitStructure.ADC_ScanConvMode = DISABLE;    //Analog to digital converter operating in single channel mode
+    ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;    //Analog to digital conversion work in single conversion mode
+    ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;    //Conversion by the software rather than external trigger
+    ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;    //ADC data align right
+    ADC_InitStructure.ADC_NbrOfChannel = 1;    //Number of ADC channels for switching sequence rules
+    ADC_Init(ADC1, &ADC_InitStructure);    //According to the parameter initialization peripherals ADCx specified in the ADC_InitStruct register
+
+    ADC_TempSensorVrefintCmd(ENABLE); //Opening the internal temperature sensor
+    
+ 
+    ADC_Cmd(ADC1, ENABLE);    //The specified ADC1
+
+    ADC_ResetCalibration(ADC1);    //Reset reset registers the specified ADC1
+
+    while(ADC_GetResetCalibrationStatus(ADC1));    //Gets a ADC1 reset calibration register state, set the status to wait
+
+    ADC_StartCalibration(ADC1);     //
+
+    while(ADC_GetCalibrationStatus(ADC1));        //The calibration procedure for the specified ADC1, set the status to wait
+}
+u16 T_Get_Adc(u8 ch) 
+    {
+ 
+    ADC_RegularChannelConfig(ADC1, ch, 1, ADC_SampleTime_239Cycles5 );    //ADC1,ADC channel 3, the first conversion, sampling time of 239.5 cycle                  
+ 
+    ADC_SoftwareStartConvCmd(ADC1, ENABLE);        //The specified ADC1 software conversion start function
+    while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC ));//Waiting for the end of conversion
+    return ADC_GetConversionValue(ADC1);    //Returns the last ADC1 rule group conversion results
+    }
+
+//Gets the value of the internal temperature sensor ADC sampling
+//Take 10 times, and then the average
+u16 T_Get_Temp(void)
+    {
+    u16 temp_val=0;
+    u8 t;
+    for(t=0;t<10;t++)
+        {
+        temp_val+=T_Get_Adc(ADC_Channel_16);     //TampSensor
+        delayMs(5);
+        }
+    return temp_val/10;
+    }
+
+ //Conversion of CH channel value
+//Take times times, and then the average
+u16 T_Get_Adc_Average(u8 ch,u8 times)
+{
+    u32 temp_val=0;
+    u8 t;
+    for(t=0;t<times;t++)
+    {
+        temp_val+=T_Get_Adc(ch);
+        delayMs(5);
+    }
+    return temp_val/times;
+}
+
+
