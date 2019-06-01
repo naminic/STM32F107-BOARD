@@ -8,7 +8,9 @@ completed source of the hardware include schematic and PCB with more than 50 exa
 مثال های این برد آموزشی در 3 فولدر جداگانه قرار داده شده است
 
 فولدر مثال های درایور های قدیمی
+
 stm32 spl driver sampel
+
 این بخش شامل مثال های فیلم های آموزشی ،آموزش آرم از 0 تا 100 می باشد که فیلم های آموزشی مثال های مربوطه را میتوانید در لینک زیر مشاهده نمایید.
 
 http://www.naminic.com/202-2/
