@@ -1,5 +1,6 @@
 # STM32F107-BOARD
 completed source of the hardware include schematic and PCB with more than 50 example by HAL driver and KEIL compiler 
+
 آموزش میکروکنترلر آرم با استفاده از سخت افزار متن باز گروه صنعتی نامینیک.
 
 سورس فایل پی سی بی و شماتیک در یک فولدر قرار داده شده است که به راحتی میتوانید سخت افزار مورد نیاز برای آموزش را به راحتی بسازید
