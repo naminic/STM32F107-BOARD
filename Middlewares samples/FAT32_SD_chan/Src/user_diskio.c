@@ -39,7 +39,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#include "stm3210c_sd.h"
+#include "stm3210c_eval_sd.h"
 /* Private variables ---------------------------------------------------------*/
 /* Disk status */
 static volatile DSTATUS Stat = STA_NOINIT;
@@ -84,11 +84,14 @@ DSTATUS USER_initialize (
   /* USER CODE BEGIN INIT */
     Stat = STA_NOINIT;
   /* Configure the uSD device */
-  if(BSP_SD_Init() == MSD_OK)
-  {
+//  if(BSP_SD_Init() == MSD_OK)
+//  {
+//    Stat &= ~STA_NOINIT;
+//  }    
+//    return Stat;
+	
+		while(BSP_SD_Init() != 0);
     Stat &= ~STA_NOINIT;
-  }    
-    return Stat;
   /* USER CODE END INIT */
 }
  
@@ -217,7 +220,6 @@ DRESULT USER_ioctl (
 
   
   if (Stat & STA_NOINIT) return RES_NOTRDY;
-  
   switch (cmd)
   {
   /* Make sure that no pending write process */
@@ -228,14 +230,14 @@ DRESULT USER_ioctl (
   /* Get number of sectors on the disk (DWORD) */
   case GET_SECTOR_COUNT :
     BSP_SD_GetCardInfo(&CardInfo);
-	  *(uint32_t*)buff = CardInfo.LogBlockNbr;
+	  *(uint32_t*)buff =2014314496/512;// CardInfo.LogBlockNbr;
     res = RES_OK;
     break;
   
   /* Get R/W sector size (WORD) */
   case GET_SECTOR_SIZE :
     BSP_SD_GetCardInfo(&CardInfo);
-    *(uint32_t*)buff = CardInfo.LogBlockSize;
+    *(uint32_t*)buff = 512;//CardInfo.LogBlockSize;
     res = RES_OK;
     break;
 	
@@ -243,7 +245,7 @@ DRESULT USER_ioctl (
   /* Get erase block size in unit of sector (DWORD) */
   case GET_BLOCK_SIZE :
     BSP_SD_GetCardInfo(&CardInfo);
-    *(uint32_t*)buff = CardInfo.LogBlockSize;
+    *(uint32_t*)buff = 512;//CardInfo.LogBlockSize;
     res = RES_OK;
     break;
   

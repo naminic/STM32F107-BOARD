@@ -8,27 +8,38 @@
 /*-----------------------------------------------------------------------------/
 / Additional user header to be used  
 /-----------------------------------------------------------------------------*/
-#include "stm32f1xx_hal.h"
-#include "stm3210c_eval_sd.h"
+/* Replace 'stm32xxx' with the STM32 Serie used, ex: stm32f4xx_hal.h */
+#include "stm32xxx_hal.h" 
 
-/*-----------------------------------------------------------------------------/
+/* If uSD is used, then include the uSD BSP header file. 
+   Replace 'stm32xxx' with your EVAL board name, ex: stm324x9i_eval_sd.h 
+   */
+#include "stm32xxx_eval_sd.h"
+
+/* If USB Host MSC is used, then need to include the USBH and UBSH MSC core header files */
+#include "usbh_core.h"
+#include "usbh_msc.h"
+/* hUSBH to be updated with the USBH handle defined in the application code */
+#define  HOST_HANDLE   hUSBH 
+
+/*---------------------------------------------------------------------------/
 / Functions and Buffer Configurations
 /---------------------------------------------------------------------------*/
 
-#define _FS_TINY             0      /* 0:Normal or 1:Tiny */
+#define	_FS_TINY                0	/* 0:Normal or 1:Tiny */
 /* When _FS_TINY is set to 1, it reduces memory consumption _MAX_SS bytes each
 /  file object. For file data transfer, FatFs uses the common sector buffer in
 /  the file system object (FATFS) instead of private sector buffer eliminated
 /  from the file object (FIL). */
 
 
-#define _FS_READONLY         0      /* 0:Read/Write or 1:Read only */
+#define _FS_READONLY            0	/* 0:Read/Write or 1:Read only */
 /* Setting _FS_READONLY to 1 defines read only configuration. This removes
 /  writing functions, f_write(), f_sync(), f_unlink(), f_mkdir(), f_chmod(),
 /  f_rename(), f_truncate() and useless f_getfree(). */
 
 
-#define _FS_MINIMIZE         0      /* 0 to 3 */
+#define _FS_MINIMIZE            0	/* 0 to 3 */
 /* The _FS_MINIMIZE option defines minimization level to remove API functions.
 /
 /   0: All basic functions are enabled.
@@ -38,23 +49,23 @@
 /   3: f_lseek() function is removed in addition to 2. */
 
 
-#define _USE_STRFUNC         2      /* 0:Disable or 1-2:Enable */
+#define	_USE_STRFUNC            2	/* 0:Disable or 1-2:Enable */
 /* To enable string functions, set _USE_STRFUNC to 1 or 2. */
 
 
-#define _USE_MKFS            1      /* 0:Disable or 1:Enable */
+#define	_USE_MKFS               1	/* 0:Disable or 1:Enable */
 /* To enable f_mkfs() function, set _USE_MKFS to 1 and set _FS_READONLY to 0 */
 
 
-#define _USE_FASTSEEK        1      /* 0:Disable or 1:Enable */
+#define	_USE_FASTSEEK           1	/* 0:Disable or 1:Enable */
 /* To enable fast seek feature, set _USE_FASTSEEK to 1. */
 
 
-#define _USE_LABEL           0      /* 0:Disable or 1:Enable */
+#define _USE_LABEL              0	/* 0:Disable or 1:Enable */
 /* To enable volume label functions, set _USE_LAVEL to 1 */
 
 
-#define _USE_FORWARD         0      /* 0:Disable or 1:Enable */
+#define	_USE_FORWARD            0	/* 0:Disable or 1:Enable */
 /* To enable f_forward() function, set _USE_FORWARD to 1 and set _FS_TINY to 1. */
 
 
@@ -62,7 +73,7 @@
 / Locale and Namespace Configurations
 /---------------------------------------------------------------------------*/
 
-#define _CODE_PAGE         1252
+#define _CODE_PAGE              1252
 /* The _CODE_PAGE specifies the OEM code page to be used on the target system.
 /  Incorrect setting of the code page can cause a file open failure.
 /
@@ -94,8 +105,8 @@
 /   1    - ASCII (Valid for only non-LFN configuration) */
 
 
-#define _USE_LFN     0  /* 0 to 3 */
-#define _MAX_LFN     255  /* Maximum LFN length to handle (12 to 255) */
+#define	_USE_LFN                3		/* 0 to 3 */
+#define	_MAX_LFN                255		/* Maximum LFN length to handle (12 to 255) */
 /* The _USE_LFN option switches the LFN feature.
 /
 /   0: Disable LFN feature. _MAX_LFN has no effect.
@@ -111,20 +122,20 @@
 /  to the project. */
 
 
-#define _LFN_UNICODE    0 /* 0:ANSI/OEM or 1:Unicode */
+#define	_LFN_UNICODE            0	/* 0:ANSI/OEM or 1:Unicode */
 /* To switch the character encoding on the FatFs API (TCHAR) to Unicode, enable LFN
 /  feature and set _LFN_UNICODE to 1. This option affects behavior of string I/O
 /  functions. This option must be 0 when LFN feature is not enabled. */
 
 
-#define _STRF_ENCODE    3 /* 0:ANSI/OEM, 1:UTF-16LE, 2:UTF-16BE, 3:UTF-8 */
+#define _STRF_ENCODE            3	/* 0:ANSI/OEM, 1:UTF-16LE, 2:UTF-16BE, 3:UTF-8 */
 /* When Unicode API is enabled by _LFN_UNICODE option, this option selects the character
 /  encoding on the file to be read/written via string I/O functions, f_gets(), f_putc(),
 /  f_puts and f_printf(). This option has no effect when _LFN_UNICODE == 0. Note that
 /  FatFs supports only BMP. */
 
 
-#define _FS_RPATH       0 /* 0 to 2 */
+#define _FS_RPATH               0	/* 0 to 2 */
 /* The _FS_RPATH option configures relative path feature.
 /
 /   0: Disable relative path feature and remove related functions.
@@ -138,7 +149,7 @@
 / Drive/Volume Configurations
 /---------------------------------------------------------------------------*/
 
-#define _VOLUMES    1
+#define _VOLUMES                1
 /* Number of volumes (logical drives) to be used. */
 
 
@@ -150,7 +161,7 @@
 /  strings are: 0-9 and A-Z. */
 
 
-#define _MULTI_PARTITION     0 /* 0:Single partition, 1:Enable multiple partition */
+#define	_MULTI_PARTITION        0	/* 0:Single partition, 1:Enable multiple partition */
 /* By default(0), each logical drive number is bound to the same physical drive number
 /  and only a FAT volume found on the physical drive is mounted. When it is set to 1,
 /  each logical drive number is bound to arbitrary drive/partition listed in VolToPart[].
@@ -166,7 +177,7 @@
 /  GET_SECTOR_SIZE command must be implemented to the disk_ioctl() function. */
 
 
-#define _USE_ERASE     0 /* 0:Disable or 1:Enable */
+#define	_USE_ERASE              0	/* 0:Disable or 1:Enable */
 /* To enable sector erase feature, set _USE_ERASE to 1. Also CTRL_ERASE_SECTOR command
 /  should be added to the disk_ioctl() function. */
 
@@ -194,9 +205,9 @@
 /  with file lock control. This feature uses bss _FS_LOCK * 12 bytes. */
 
 
-#define _FS_REENTRANT           0	/* 0:Disable or 1:Enable */
+#define _FS_REENTRANT           1	/* 0:Disable or 1:Enable */
 #define _FS_TIMEOUT             1000	/* Timeout period in unit of time tick */
-#define	_SYNC_t                 0	/* O/S dependent sync object type. e.g. HANDLE, OS_EVENT*, ID, SemaphoreHandle_t and etc.. */
+#define	_SYNC_t                 osSemaphoreId	/* O/S dependent sync object type. e.g. HANDLE, OS_EVENT*, ID, SemaphoreHandle_t and etc.. */
 /* The _FS_REENTRANT option switches the re-entrancy (thread safe) of the FatFs module.
 /
 /   0: Disable re-entrancy. _FS_TIMEOUT and _SYNC_t have no effect.
@@ -206,7 +217,7 @@
 */
 
 
-#define _WORD_ACCESS    0 /* 0 or 1 */
+#define _WORD_ACCESS            0	/* 0 or 1 */
 /* The _WORD_ACCESS option is an only platform dependent option. It defines
 /  which access method is used to the word data on the FAT volume.
 /

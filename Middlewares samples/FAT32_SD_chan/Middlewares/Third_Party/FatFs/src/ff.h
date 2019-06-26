@@ -1,23 +1,21 @@
 /*---------------------------------------------------------------------------/
-/  FatFs - FAT file system module include R0.11     (C)ChaN, 2015
+/  FatFs - FAT file system module include file  R0.10b    (C)ChaN, 2014
 /----------------------------------------------------------------------------/
-/ FatFs module is a free software that opened under license policy of
-/ following conditions.
+/ FatFs module is a generic FAT file system module for small embedded systems.
+/ This is a free software that opened for education, research and commercial
+/ developments under license policy of following terms.
 /
-/ Copyright (C) 2015, ChaN, all right reserved.
+/  Copyright (C) 2014, ChaN, all right reserved.
 /
-/ 1. Redistributions of source code must retain the above copyright notice,
-/    this condition and the following disclaimer.
+/ * The FatFs module is a free software and there is NO WARRANTY.
+/ * No restriction on use. You can use, modify and redistribute it for
+/   personal, non-profit or commercial product UNDER YOUR RESPONSIBILITY.
+/ * Redistributions of source code must retain the above copyright notice.
 /
-/ This software is provided by the copyright holder and contributors "AS IS"
-/ and any warranties related to this software are DISCLAIMED.
-/ The copyright owner or contributors be NOT LIABLE for any damages caused
-/ by use of this software.
-/---------------------------------------------------------------------------*/
-
+/----------------------------------------------------------------------------*/
 
 #ifndef _FATFS
-#define _FATFS	32020	/* Revision ID */
+#define _FATFS	8051	/* Revision ID */
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,6 +23,7 @@ extern "C" {
 
 #include "integer.h"	/* Basic integer types */
 #include "ffconf.h"		/* FatFs configuration options */
+
 #if _FATFS != _FFCONF
 #error Wrong configuration file (ffconf.h).
 #endif
@@ -151,8 +150,8 @@ typedef struct {
 typedef struct {
 #if !_FS_TINY
   union{  
-            UINT     d32[_MAX_SS/4];  /* Force 32bits alignement */  
-            BYTE   d8[_MAX_SS];  /* File data read/write buffer */
+	UINT	d32[_MAX_SS/4];  /* Force 32bits alignement */  
+	BYTE	d8[_MAX_SS];	/* File data read/write buffer */
   }buf;
 #endif   
 	FATFS*	fs;				/* Pointer to the owner file system object (**do not change order**) */
@@ -170,14 +169,11 @@ typedef struct {
 	WCHAR*	lfn;			/* Pointer to the LFN working buffer */
 	WORD	lfn_idx;		/* Last matched LFN index number (0xFFFF:No LFN) */
 #endif
-#if _USE_FIND
-	const TCHAR*	pat;	/* Pointer to the name matching pattern */
-#endif
 } DIR;
 
 
 
-/* File information structure (FILINFO) */
+/* File status structure (FILINFO) */
 
 typedef struct {
 	DWORD	fsize;			/* File size */
@@ -234,13 +230,11 @@ FRESULT f_sync (FIL* fp);											/* Flush cached data of a writing file */
 FRESULT f_opendir (DIR* dp, const TCHAR* path);						/* Open a directory */
 FRESULT f_closedir (DIR* dp);										/* Close an open directory */
 FRESULT f_readdir (DIR* dp, FILINFO* fno);							/* Read a directory item */
-FRESULT f_findfirst (DIR* dp, FILINFO* fno, const TCHAR* path, const TCHAR* pattern);	/* Find first file */
-FRESULT f_findnext (DIR* dp, FILINFO* fno);							/* Find next file */
 FRESULT f_mkdir (const TCHAR* path);								/* Create a sub directory */
 FRESULT f_unlink (const TCHAR* path);								/* Delete an existing file or directory */
 FRESULT f_rename (const TCHAR* path_old, const TCHAR* path_new);	/* Rename/Move a file or directory */
 FRESULT f_stat (const TCHAR* path, FILINFO* fno);					/* Get file status */
-FRESULT f_chmod (const TCHAR* path, BYTE attr, BYTE mask);			/* Change attribute of the file/dir */
+FRESULT f_chmod (const TCHAR* path, BYTE value, BYTE mask);			/* Change attribute of the file/dir */
 FRESULT f_utime (const TCHAR* path, const FILINFO* fno);			/* Change times-tamp of the file/dir */
 FRESULT f_chdir (const TCHAR* path);								/* Change current directory */
 FRESULT f_chdrive (const TCHAR* path);								/* Change current drive */
@@ -256,12 +250,10 @@ int f_puts (const TCHAR* str, FIL* cp);								/* Put a string to the file */
 int f_printf (FIL* fp, const TCHAR* str, ...);						/* Put a formatted string to the file */
 TCHAR* f_gets (TCHAR* buff, int len, FIL* fp);						/* Get a string from the file */
 
-#define f_eof(fp) ((int)((fp)->fptr == (fp)->fsize))
+#define f_eof(fp) (((fp)->fptr == (fp)->fsize) ? 1 : 0)
 #define f_error(fp) ((fp)->err)
 #define f_tell(fp) ((fp)->fptr)
 #define f_size(fp) ((fp)->fsize)
-#define f_rewind(fp) f_lseek((fp), 0)
-#define f_rewinddir(dp) f_readdir((dp), 0)
 
 #ifndef EOF
 #define EOF (-1)
@@ -274,7 +266,7 @@ TCHAR* f_gets (TCHAR* buff, int len, FIL* fp);						/* Get a string from the fil
 /* Additional user defined functions                            */
 
 /* RTC function */
-#if !_FS_READONLY && !_FS_NORTC
+#if !_FS_READONLY
 DWORD get_fattime (void);
 #endif
 

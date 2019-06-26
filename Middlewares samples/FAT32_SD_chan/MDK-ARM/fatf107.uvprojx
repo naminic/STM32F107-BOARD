@@ -366,10 +366,10 @@
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F107xC</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;       ../Drivers/STM32F1xx_HAL_Driver/Inc;       ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;       ../Middlewares/Third_Party/FatFs/src;       ../Drivers/CMSIS/Device/ST/STM32F1xx/Include;       ../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Middlewares\Third_Party\FatFs\src\drivers</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -423,31 +423,6 @@
           <GroupName>Application/User</GroupName>
           <Files>
             <File>
-              <FileName>stm3210c_sd_io.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\stm3210c_sd_io.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm3210c_sd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\stm3210c_sd.c</FilePath>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Src/main.c</FilePath>
-            </File>
-            <File>
-              <FileName>user_diskio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Src/user_diskio.c</FilePath>
-            </File>
-            <File>
-              <FileName>fatfs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Src/fatfs.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f1xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/stm32f1xx_it.c</FilePath>
@@ -456,6 +431,26 @@
               <FileName>stm32f1xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/stm32f1xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>sd_diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FatFs\src\drivers\sd_diskio.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm3210c_eval_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\stm3210c_eval_sd.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm3210c_eval.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\stm3210c_eval.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\main.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -566,6 +561,11 @@
               <FileName>syscall.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Middlewares/Third_Party/FatFs/src/option/syscall.c</FilePath>
+            </File>
+            <File>
+              <FileName>unicode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\FatFs\src\option\unicode.c</FilePath>
             </File>
           </Files>
         </Group>

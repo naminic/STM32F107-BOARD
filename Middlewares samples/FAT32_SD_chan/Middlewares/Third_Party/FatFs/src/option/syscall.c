@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------*/
-/* Sample code of OS dependent controls for FatFs                         */
+/* Sample code of OS dependent controls for FatFs R0.10b                   */
 /* (C)ChaN, 2014                                                          */
 /*------------------------------------------------------------------------*/
 
@@ -98,10 +98,10 @@ void ff_rel_grant (
 */
 
 void* ff_memalloc (	/* Returns pointer to the allocated memory block */
-	UINT msize		/* Number of bytes to allocate */
+	UINT size		/* Number of bytes to allocate */
 )
 {
-	return malloc(msize);	/* Allocate a new memory block with POSIX API */
+  return malloc(size);
 }
 
 
@@ -109,11 +109,11 @@ void* ff_memalloc (	/* Returns pointer to the allocated memory block */
 /* Free a memory block                                                    */
 /*------------------------------------------------------------------------*/
 
-void ff_memfree (
+void ff_memfree(
 	void* mblock	/* Pointer to the memory block to free */
 )
 {
-	free(mblock);	/* Discard the memory block with POSIX API */
+  free(mblock);
 }
 
 #endif
